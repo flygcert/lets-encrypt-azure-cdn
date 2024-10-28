@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "lets_encrypt_azure_cdn_v8": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7214",
+      "launchBrowser": false
+    }
+  }
+}

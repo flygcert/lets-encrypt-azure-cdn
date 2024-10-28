@@ -1,23 +1,15 @@
 ﻿using Azure;
 using Azure.Identity;
 using Azure.Security.KeyVault.Certificates;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LetsEncryptAzureCdn.Helpers
+namespace Flygcert.LetsEncryptAzureCdn.Helpers
 {
-    public class KeyVaultCertificateHelper
+    public class KeyVaultCertificateHelper(string keyVaultName)
     {
-        private string keyVaultUri;
-        private CertificateClient certificateClient;
-
-        public KeyVaultCertificateHelper(string keyVaultName)
-        {
-            keyVaultUri = $"https://{keyVaultName}.vault.azure.net";
-            certificateClient = new CertificateClient(new Uri(keyVaultUri), new ManagedIdentityCredential());
-        }
+        private readonly CertificateClient certificateClient = new(
+                new Uri($"https://{keyVaultName}.vault.azure.net"),
+                new DefaultAzureCredential()
+            );
 
         public async Task<(string, string)> ImportCertificate(string certificateName, byte[] certificate, string password)
         {

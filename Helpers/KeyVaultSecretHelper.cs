@@ -1,25 +1,17 @@
 ﻿using Azure;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LetsEncryptAzureCdn.Helpers
+namespace Flygcert.LetsEncryptAzureCdn.Helpers
 {
-    public class KeyVaultSecretHelper
+    public class KeyVaultSecretHelper(string keyVaultName)
     {
-        private string keyVaultUri;
-        private SecretClient secretClient;
+        private readonly SecretClient secretClient = new(
+                new Uri($"https://{keyVaultName}.vault.azure.net"),
+                new DefaultAzureCredential()
+            );
 
-        public KeyVaultSecretHelper(string keyVaultName)
-        {
-            keyVaultUri = $"https://{keyVaultName}.vault.azure.net";
-            secretClient = new SecretClient(new Uri(keyVaultUri), new ManagedIdentityCredential());
-        }
-
-        public async Task<string> GetSecretAsync(string secretName)
+        public async Task<string?> GetSecretAsync(string secretName)
         {
             try
             {
